@@ -62,15 +62,9 @@ app.renderMessage = function (obj) {
   var msg = document.createElement('p');
   var atag = document.createElement('a');
   atag.innerHTML = obj.username;
-
-  if (obj === undefined) {
-    msg.innerHTML = '';
-  } else {
-    msg.innerHTML = obj.text;  
-  }
- // document.getElementById('chats').appendChild(atag);
-  document.getElementById('form').appendChild(atag);
-  document.getElementById('form').appendChild(msg);
+  msg.innerHTML = obj.text;
+  $('#form').append('<a href = "#">'+ obj.username + '</a>');
+  $('#form').append('<p>'+ obj.text + '</p>');
 };
 
   
@@ -108,7 +102,6 @@ app.handleSubmit = function (value) {
   //var text = getElementById('message').innerHTML;
   $('#send').click(function() {
     var text = $('#message').val();
-    console.log(text);
     var input = {
       username: userName,
       text: text};
