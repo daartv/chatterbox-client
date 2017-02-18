@@ -27,13 +27,15 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
-      <div><input value="What's up?"></div>
-      <div><button value="button" onfocus="if(this.value == 'value') { this.value = ''; }">Send</button></div>
+      <div><input value="What's up?" id='message'></div>
+      <div><button value="button" id="send" class='submit'>Send</button></div>
     </div>
     <div> <select id='roomSelect'>
 </select></div>
     <div id="chats">
-      <div></div>
+      <div>
+        <h2 id='user' class='username'></h2>
+      </div>
     </div>
   </body>
 </html>
