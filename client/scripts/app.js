@@ -63,8 +63,8 @@ app.renderMessage = function (obj) {
   var atag = document.createElement('a');
   atag.innerHTML = obj.username;
   msg.innerHTML = obj.text;
-  $('#form').append('<a href = "#">'+ obj.username + '</a>');
-  $('#form').append('<p>'+ obj.text + '</p>');
+  $('#chats').append('<a href = "#" onclick="app.handleUsernameClick">' + obj.username + '</a>');
+  $('#chats').append('<p>' + obj.text + '</p>');
 };
 
   
@@ -77,8 +77,8 @@ app.renderRoom = function (chatRoom) {
 
 app.handleUsernameClick = function () {
   var user = document.getElementById('user');
-
-  $('#user').on('click', function () {
+  console.log('user clicked!');
+  $('a').on('click', function () {
   
   });
 };
