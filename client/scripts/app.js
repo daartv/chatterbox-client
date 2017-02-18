@@ -61,14 +61,15 @@ app.clearMessages = function () {
 app.renderMessage = function (obj) {
   var msg = document.createElement('p');
   var atag = document.createElement('a');
+  atag.innerHTML = obj.username;
 
   if (obj === undefined) {
     msg.innerHTML = '';
   } else {
-    msg.innerHTML = obj.username + ': ' + obj.text;  
+    msg.innerHTML = obj.text;  
   }
  // document.getElementById('chats').appendChild(atag);
-
+  document.getElementById('form').appendChild(atag);
   document.getElementById('form').appendChild(msg);
 };
 
