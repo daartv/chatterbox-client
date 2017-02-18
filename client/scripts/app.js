@@ -6,6 +6,11 @@ $(document).ready(function () {
   $('#message').click(function() {
     $('#message').innerHTML = ' ';
   });
+  $('#message').keypress(function(e) {
+    if (e.which === 13) {
+      $('#send').trigger('click');
+    }
+  });
   app.handleSubmit();
 });
 
@@ -54,20 +59,13 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (obj) {
- // console.log(obj);
-  obj.userName = userName;
   var msg = document.createElement('p');
-  
   var atag = document.createElement('a');
-  // var user = document.createTextNode(message.username);
-  // atag.appendChild(user);
-  //var h2 = document.getElementsByClassName('username');
-  //console.log(h2);
-  // h2.innerHTML = message.username;
+
   if (obj === undefined) {
     msg.innerHTML = '';
   } else {
-    msg.innerHTML = obj.text;  
+    msg.innerHTML = obj.username + ': ' + obj.text;  
   }
  // document.getElementById('chats').appendChild(atag);
 
@@ -113,7 +111,11 @@ app.handleSubmit = function (value) {
     var input = {
       username: userName,
       text: text};
-    app.renderMessage(input);
+
+    if (input.text !== '') {  
+      app.renderMessage(input);
+    }
+    
     document.getElementById('message').value = '';
   });
 
