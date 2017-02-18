@@ -12,13 +12,17 @@ $(document).ready(function () {
     }
   });
   app.handleSubmit();
+  app.fetch();
 });
 
-window.messagesStorage = [];
+window.userStorage = [];
+
+window.friends = {};
 
 app.init = function () {
   $('#user').on('click', app.handleUsernameClick());
-  $('#user').on('click', app.handleSubmit());
+  $('a').on('click', app.handleSubmit());
+
 };
 
 
@@ -41,17 +45,25 @@ app.send = function (message) {
 
 app.fetch = function () {
   $.ajax({
+    url: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages',
     type: 'GET',
-    data: JSON.stringify(message),
+    data: {'order': '-createdAt'},
     contentType: 'application/json',
+    // dataType: 'json',
     success: function (data) {
-      console.log('chatterbox; Message sent');
+      console.log(data);
+      // console.log('chatterbox; Message fetch');
+      for (var i = data.results.length - 1; i >= 0; i--) {     
+        app.renderMessage(data.results[i]);
+        app.renderRoom(data.results[i]);
+      }
     },
     error: function(data) {
-      console.error('chatterbox: Failed to send message');
+      console.error('chatterbox: This is a \'failed to send\' message from app.fetch');
     }
   });
 };  
+
 
 app.clearMessages = function () {
   $('#chats').html('');
@@ -59,28 +71,41 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (obj) {
-  var msg = document.createElement('p');
-  var atag = document.createElement('a');
-  atag.innerHTML = obj.username;
-  msg.innerHTML = obj.text;
-  $('#chats').append('<a href = "#" onclick="app.handleUsernameClick">' + obj.username + '</a>');
-  $('#chats').append('<p>' + obj.text + '</p>');
+  // var msg = document.createElement('p');
+  // var atag = document.createElement('a');
+  // // atag.innerHTML = obj.username;
+  // msg.innerHTML = obj.text;
+  var htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+  };
+  var htmlEscaper = /[&<>"'\/]/g;
+  _.escape = function(string) {
+    return ('' + string).replace(htmlEscaper, function(match) {
+      return htmlEscapes[match];
+    });
+  };
+  $('#chats').prepend('<p>' + _.escape(obj.text) + '</p>');
+  $('#chats').prepend('<a href = "#" onclick="app.handleUsernameClick()">' + _.escape(obj.username) + '</a>');
 };
 
   
 
 app.renderRoom = function (chatRoom) {
-  var room = document.createElement('option');
-  room.innerHTML = chatRoom;
-  document.getElementById('roomSelect').appendChild(room);
+  $('#roomSelect').append( chatRoom.roomname);
+ // room.innerHTML = chatRoom;
+  //document.getElementById('roomSelect').appendChild(room);
 };  
 
-app.handleUsernameClick = function () {
-  var user = document.getElementById('user');
+app.handleUsernameClick = function (data) {
+  userStorage.push($('a'));
   console.log('user clicked!');
-  $('a').on('click', function () {
+  //console.log(data.username);
   
-  });
 };
 
 app.getUserName = function () {
@@ -104,10 +129,13 @@ app.handleSubmit = function (value) {
     var text = $('#message').val();
     var input = {
       username: userName,
-      text: text};
+      text: text,
+      //roomname: roomname
+    };
 
     if (input.text !== '') {  
       app.renderMessage(input);
+      app.send(input);
     }
     
     document.getElementById('message').value = '';
