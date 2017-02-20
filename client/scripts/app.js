@@ -124,7 +124,7 @@ app.renderRoom = function (roomname) {
 
 app.handleUsernameClick = function () {
 
-  //console.log($('#thisuser'));
+  console.log($('#thisuser'));
   
   
 };
